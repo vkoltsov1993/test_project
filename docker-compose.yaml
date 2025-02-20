@@ -1,0 +1,69 @@
+services:
+  nginx:
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+    environment:
+      APP_NAME: test_project
+    container_name: test_project_nginx
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - "8080:80"
+    depends_on:
+      - php
+      - mysql
+    networks:
+      - lemp-network
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    container_name: test_project_php
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - lemp-network
+
+  mysql:
+    image: mysql:8.4.3
+    container_name: test_project_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_project
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+    networks:
+      - lemp-network
+
+  mailhog:
+    build:
+      context: ./docker/mailhog
+      dockerfile: Dockerfile
+    container_name: test_project_mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - lemp-network
+
+  redis:
+    image: redis:alpine3.21
+    container_name: test_project_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - lemp-network
+
+networks:
+  lemp-network:
+    driver: bridge
