@@ -2,17 +2,17 @@
 
 namespace App\Services\SubscriptionService;
 
+use App\Dto\ProductUrlDto;
+use App\Dto\UserDto;
 use App\Mail\PriceChangedMail;
-use App\Models\ProductUrl;
-use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 class PriceChangedEmailNotifier implements Subscriber
 {
     public function __construct(
-        private readonly User       $user,
-        private readonly ProductUrl $productUrl,
-        private readonly float $newPrice
+        private readonly UserDto       $userDto,
+        private readonly ProductUrlDto $productUrlDto,
+        private readonly float         $newPrice
     )
     {
 
@@ -20,14 +20,14 @@ class PriceChangedEmailNotifier implements Subscriber
 
     public function update(): void
     {
-        $this->sendEmail($this->user->email);
+        $this->sendEmail($this->userDto->email);
     }
 
     private function sendEmail(string $email): void
     {
         Mail::to($email)
             ->send(new PriceChangedMail(
-                $this->user, $this->productUrl, $this->newPrice
+                $this->userDto, $this->productUrlDto, $this->newPrice
             ));
     }
 }

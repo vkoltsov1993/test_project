@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum ProductUrlShop: int
+enum Shop: int
 {
     case Olx = 1;
 }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\ProductUrlShop;
+use App\Enums\Shop;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -13,7 +13,7 @@ class ProductUrl extends Model
     protected function casts(): array
     {
         return [
-            'shop' => ProductUrlShop::class,
+            'shop' => Shop::class,
         ];
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\SubscriptionService\OlxSubscriptionService;
+use App\Services\SubscriptionService\Shops\OlxSubscriptionService;
 use App\Services\SubscriptionService\SubscriptionService;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->bind(SubscriptionService::class, OlxSubscriptionService::class);
+
     }
 }

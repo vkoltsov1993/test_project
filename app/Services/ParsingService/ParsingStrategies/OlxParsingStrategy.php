@@ -2,10 +2,8 @@
 
 namespace App\Services\ParsingService\ParsingStrategies;
 
-require_once "simple_html_dom.php";
-
 use App\Exceptions\OlxParseException;
-use function App\Services\ParsingService\file_get_html;
+use Src\ParsingService\SimpleHtml;
 
 class OlxParsingStrategy extends ParsingStrategy
 {
@@ -48,7 +46,7 @@ class OlxParsingStrategy extends ParsingStrategy
     private function getNode()
     {
         try {
-            return file_get_html($this->url);
+            return SimpleHtml::getNode($this->url);
         } catch (\ErrorException) {
             throw new OlxParseException('Url does not exist', 404);
         }

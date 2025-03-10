@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Dto\ProductUrlDto;
+use App\Dto\UserDto;
 use App\Models\ProductUrl;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -18,9 +20,9 @@ class PriceChangedMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        private readonly User       $user,
-        private readonly ProductUrl $productUrl,
-        private readonly float      $newPrice
+        private readonly UserDto       $userDto,
+        private readonly ProductUrlDto $productUrlDto,
+        private readonly float         $newPrice
     )
     {
         //
@@ -41,11 +43,11 @@ class PriceChangedMail extends Mailable
      */
     public function content(): Content
     {
-        return (new Content(
+        return new Content(
             view: 'mail.price_changed',
-        ))->with([
-            'user' => $this->user,
-            'productUrl' => $this->productUrl,
+        )->with([
+            'user' => $this->userDto,
+            'productUrl' => $this->productUrlDto,
             'newPrice' => $this->newPrice
         ]);
     }

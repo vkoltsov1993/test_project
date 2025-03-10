@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\ParsingService;
+namespace Src\ParsingService;
 /**
  * Website: http://sourceforge.net/projects/simplehtmldom/
  * Additional projects: http://sourceforge.net/projects/debugobject/
