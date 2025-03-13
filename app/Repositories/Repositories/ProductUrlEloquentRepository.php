@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ProductUrlEloquentRepository implements ProductUrlRepository
 {
+    public function __construct(private readonly UserEloquentRepository $userEloquentRepository)
+    {
+    }
+
     /**
      * @return ProductUrlDto[]
      */
@@ -42,6 +46,14 @@ class ProductUrlEloquentRepository implements ProductUrlRepository
     public function updateOrCreate(array $attributes, array $values = []): ProductUrlDto
     {
         $productUrl = ProductUrl::query()->updateOrCreate($attributes, $values);
+
         return new ProductUrlDto($productUrl->toArray());
+    }
+
+    public function syncWithUser(UserDto $userDto, array $productUrls): array
+    {
+        $user = $this->userEloquentRepository->find($userDto->id, 'productUrls');
+
+        return $user->productUrls()->sync($productUrls);
     }
 }

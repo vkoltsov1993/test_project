@@ -2,6 +2,7 @@
 
 namespace App\Services\SubscriptionService\Shops;
 
+use App\Dto\ProductUrlDto;
 use App\Enums\Shop;
 use App\Models\ProductUrl;
 use App\Services\ParsingService\ParsingService;
@@ -12,13 +13,13 @@ class OlxSubscriptionService extends SubscriptionService
 {
     private readonly ParsingService $parsingService;
 
-    public function getNewProductPrice(string $url): float
+    public function getProductWithUpdatedPrice(string $url): ProductUrlDto
     {
         $this->parsingService = new ParsingService(new OlxParsingStrategy($url));
         $productName = $this->parsingService->getProductName();
         $productPrice = $this->parsingService->getProductPrice();
 
-        $productUrlDto = $this->productUrlRepository->updateOrCreate(
+        return $this->productUrlRepository->updateOrCreate(
             [
                 'url' => $url,
                 'shop' => Shop::Olx
@@ -27,7 +28,5 @@ class OlxSubscriptionService extends SubscriptionService
                 'name' => $productName,
                 'price' => $productPrice,
             ]);
-
-        return $productUrlDto->price;
     }
 }

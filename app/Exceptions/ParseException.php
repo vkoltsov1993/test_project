@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class OlxParseException extends ParseException
+class ParseException extends Exception
 {
     //
 }

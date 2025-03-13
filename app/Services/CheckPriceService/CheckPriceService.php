@@ -45,7 +45,7 @@ class CheckPriceService
     {
         $subscriptionService = $this->setSubscriptionService($shopId);
 
-        return $subscriptionService->getNewProductPrice($url);
+        return $subscriptionService->getProductWithUpdatedPrice($url)->price;
     }
 
     private function setSubscriptionService(int $shopId): SubscriptionService

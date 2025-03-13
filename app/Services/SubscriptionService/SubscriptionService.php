@@ -2,30 +2,28 @@
 
 namespace App\Services\SubscriptionService;
 
-use App\Models\ProductUrl;
-use App\Models\User;
+use App\Dto\ProductUrlDto;
 use App\Repositories\Contracts\ProductUrlRepository;
+use App\Repositories\Contracts\UserRepository;
 
 abstract class SubscriptionService
 {
     public function __construct(
-        protected readonly ProductUrlRepository $productUrlRepository
+        protected readonly ProductUrlRepository $productUrlRepository,
+        protected readonly UserRepository       $userRepository,
     )
     {
     }
 
-    public function subscribe(string $url, string $email): ProductUrl
+    public function subscribe(string $url, string $email): ProductUrlDto
     {
-        $productUrl = $this->getNewProductPrice($url);
+        $productUrlDto = $this->getProductWithUpdatedPrice($url);
+        $userDto = $this->userRepository->getUserByEmail($email);
 
-        $user = User::query()
-            ->where('email', $email)
-            ->firstOrFail();
+        $this->productUrlRepository->syncWithUser($userDto, [$productUrlDto->id]);
 
-        $user->productUrls()->sync($productUrl);
-
-        return $productUrl;
+        return $productUrlDto;
     }
 
-    abstract public function getNewProductPrice(string $url): float;
+    abstract public function getProductWithUpdatedPrice(string $url): ProductUrlDto;
 }
